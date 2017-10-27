@@ -6,3 +6,7 @@
 /03-jaxrs-protected-customsecuritycontext-non_ejb-endpoint/target/
 /03-jaxrs-protected-customsecuritycontext-ejb-endpoint/target/
 /04-jaxrs-protected-customsecuritycontext-ejb-integration/target/
+/thoth-security-02-hash-sha512/target/
+/thoth-security-01-provider-list/target/
+/thoth-security-01-cipher-algorithm-list/target/
+/thoth-security-encryption-symmetric-aes256/target/
