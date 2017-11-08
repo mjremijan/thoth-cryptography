@@ -1,4 +1,4 @@
-package org.thoth.security.hash.sha512;
+package org.thoth.security.hash;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -8,7 +8,7 @@ import java.util.Base64;
 /**
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class SHA512 {
+public class Sha512 {
 
     public String hashToHex(String hashMe, String salt)
     throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -39,6 +39,7 @@ public class SHA512 {
 
         md.update(hashMe.getBytes("UTF-8"));
         md.update(salt.getBytes("UTF-8"));
+        
 
         return md.digest();
     }

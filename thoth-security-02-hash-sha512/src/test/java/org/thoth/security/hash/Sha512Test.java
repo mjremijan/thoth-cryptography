@@ -1,5 +1,6 @@
-package org.thoth.security.hash.sha512;
+package org.thoth.security.hash;
 
+import org.thoth.security.hash.Sha512;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -7,14 +8,14 @@ import org.junit.Test;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class SHA512Test {
+public class Sha512Test {
 
     @Test
     public void test_hash_to_hex() throws Exception {
         // setup
         String username = "mjremijan";
         String password = "super!secret";
-        SHA512 sha = new SHA512();
+        Sha512 sha = new Sha512();
 
         // test
         String asHex
@@ -32,7 +33,7 @@ public class SHA512Test {
         // setup
         String username = "mjremijan";
         String password = "super!secret";
-        SHA512 sha = new SHA512();
+        Sha512 sha = new Sha512();
 
         // test
         String asBase64
