@@ -25,7 +25,7 @@ public class Aes256StaticTest {
 
 
     @Test
-    public void encrypt_then_decrypt_using_secretkey_file() {
+    public void encrypt_to_string_then_decrypt_using_same_Aes256_instance() {
         // setup
         SecretKey secretKey
             = new Aes256SecretKeyProducer().generate(
