@@ -1,4 +1,4 @@
-package org.thoth.security.symmetric.aes256;
+package org.thoth.crypto.symmetric;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -17,7 +17,7 @@ import javax.crypto.spec.GCMParameterSpec;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class AES256 {
+public class Aes256 {
 
     public static int AES_KEY_SIZE = 256;
     //public static int AES_KEY_SIZE = 128;

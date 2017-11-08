@@ -1,4 +1,4 @@
-package org.thoth.security.symmetric.aes256;
+package org.thoth.crypto.symmetric;
 
 import java.util.Base64;
 import javax.crypto.Cipher;
@@ -9,7 +9,7 @@ import javax.crypto.SecretKey;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class AES {
+public class Aes {
 
     static SecretKey key;
 
@@ -28,7 +28,7 @@ public class AES {
     }
 
     /**
-     * Encrypt a string with AES algorithm.
+     * Encrypt a string with Aes algorithm.
      *
      * @param data is a string
      * @return the encrypted string
@@ -41,7 +41,7 @@ public class AES {
     }
 
     /**
-     * Decrypt a string with AES algorithm.
+     * Decrypt a string with Aes algorithm.
      *
      * @param encryptedData is a string
      * @return the decrypted string
