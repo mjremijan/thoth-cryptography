@@ -20,14 +20,11 @@ public class Aes256 {
     public static String ALGO_TRANSFORMATION_STRING = "AES/GCM/PKCS5Padding";
 
     protected SecretKey secretKey;
-    protected SecureRandom secRandom;
-
-    protected GCMParameterSpec gcmParameterSpec;
+    protected SecureRandom secureRandom;
 
     public Aes256(SecretKey secretKey) {
         this.secretKey = secretKey;
-        this.secRandom = new SecureRandom();
-        this.init();
+        this.secureRandom = new SecureRandom();
     }
 
 
@@ -36,155 +33,15 @@ public class Aes256 {
             // Transformation specifies algortihm, mode of operation and padding
             Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
 
-            // Init for encryption
-            c.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec, new SecureRandom());
-
-            // Add AAD tag data if present
-            aad.ifPresent(t -> {
-                try {
-                    c.updateAAD(t.getBytes("UTF-8"));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            // Add message to encrypt
-            c.update(message.getBytes("UTF-8"));
-
-            // Encrypt
-            byte[] encryptedBytes
-                = c.doFinal();
-
-            // Encode
-            byte[] encodedBytes
-                = Base64.getEncoder().encode(encryptedBytes);
-
-            // Return
-            return new String(encodedBytes, "UTF-8");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public String decryptFromBase64(String base64EncodedEncryptedMessage, Optional<String> aad) {
-
-        try {
-            // Transformation specifies algortihm, mode of operation and padding
-            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
-
-            // Init for decryption
-            c.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec, new SecureRandom());
-
-            // Add AAD tag data if present
-            aad.ifPresent(t -> {
-                try {
-                    c.updateAAD(t.getBytes("UTF-8"));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            // Decode
-            byte [] encryptedBytes
-                = Base64.getDecoder().decode(base64EncodedEncryptedMessage);
-
-            // Add message to decrypt
-            c.update(encryptedBytes);
-
-            // Decrypt
-            byte[] decryptedBytes
-                = c.doFinal();
-
-            // Return
-            return new String(decryptedBytes, "UTF-8");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-
-    protected void init() {
-        // Generating IV
-        byte iv[] = new byte[IV_SIZE];
-//        SecureRandom secRandom = new SecureRandom();
-//        secRandom.nextBytes(iv); // SecureRandom initialized using self-seeding
-        for (byte b=0; b<iv.length; b++) {
-            iv[b] = (byte)(b + 1);
-        }
-
-        // Initialize GCM Parameters
-        gcmParameterSpec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
-    }
-
-
-    public String decryptFromBase64_2(String base64EncodedEncryptedMessage, Optional<String> aad) {
-
-        try {
-            // Decode
-            byte [] ivPlusEncryptedBytes
-                = Base64.getDecoder().decode(base64EncodedEncryptedMessage);
-
-            // Get IV
-            byte iv[] = new byte[IV_SIZE];
-            System.arraycopy(ivPlusEncryptedBytes, 0, iv, 0, IV_SIZE);
-
-            // Initialize GCM Parameters
-            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
-
-            // Transformation specifies algortihm, mode of operation and padding
-            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
-
-            // Get encrypted bytes
-            byte [] encryptedBytes = new byte[ivPlusEncryptedBytes.length - IV_SIZE];
-            System.arraycopy(ivPlusEncryptedBytes, IV_SIZE, encryptedBytes, 0, encryptedBytes.length);
-
-            // Init for decryption
-            c.init(Cipher.DECRYPT_MODE, secretKey, spec, secRandom);
-
-            // Add AAD tag data if present
-            aad.ifPresent(t -> {
-                try {
-                    c.updateAAD(t.getBytes("UTF-8"));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            // Add message to decrypt
-            c.update(encryptedBytes);
-
-            // Decrypt
-            byte[] decryptedBytes
-                = c.doFinal();
-
-            // Return
-            return new String(decryptedBytes, "UTF-8");
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public String encryptToBase64_2(String message, Optional<String> aad) {
-        try {
-            // Transformation specifies algortihm, mode of operation and padding
-            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
-
             // Generate IV
             byte iv[] = new byte[IV_SIZE];
-            secRandom.nextBytes(iv); // SecureRandom initialized using self-seeding
+            secureRandom.nextBytes(iv); // SecureRandom initialized using self-seeding
 
             // Initialize GCM Parameters
             GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
 
             // Init for encryption
-            c.init(Cipher.ENCRYPT_MODE, secretKey, spec, secRandom);
+            c.init(Cipher.ENCRYPT_MODE, secretKey, spec, secureRandom);
 
             // Add AAD tag data if present
             aad.ifPresent(t -> {
@@ -226,4 +83,52 @@ public class Aes256 {
         }
     }
 
+
+    public String decryptFromBase64(String base64EncodedEncryptedMessage, Optional<String> aad) {
+
+        try {
+            // Decode
+            byte [] ivPlusEncryptedBytes
+                = Base64.getDecoder().decode(base64EncodedEncryptedMessage);
+
+            // Get IV
+            byte iv[] = new byte[IV_SIZE];
+            System.arraycopy(ivPlusEncryptedBytes, 0, iv, 0, IV_SIZE);
+
+            // Initialize GCM Parameters
+            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
+
+            // Transformation specifies algortihm, mode of operation and padding
+            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
+
+            // Get encrypted bytes
+            byte [] encryptedBytes = new byte[ivPlusEncryptedBytes.length - IV_SIZE];
+            System.arraycopy(ivPlusEncryptedBytes, IV_SIZE, encryptedBytes, 0, encryptedBytes.length);
+
+            // Init for decryption
+            c.init(Cipher.DECRYPT_MODE, secretKey, spec, secureRandom);
+
+            // Add AAD tag data if present
+            aad.ifPresent(t -> {
+                try {
+                    c.updateAAD(t.getBytes("UTF-8"));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            // Add message to decrypt
+            c.update(encryptedBytes);
+
+            // Decrypt
+            byte[] decryptedBytes
+                = c.doFinal();
+
+            // Return
+            return new String(decryptedBytes, "UTF-8");
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
