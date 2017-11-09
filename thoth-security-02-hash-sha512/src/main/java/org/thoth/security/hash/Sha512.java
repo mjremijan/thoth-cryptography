@@ -4,16 +4,17 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Optional;
 
 /**
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
 public class Sha512 {
 
-    public String hashToHex(String hashMe, String salt)
+    public String hashToHex(String hashMe, Optional<String> salt)
     throws NoSuchAlgorithmException, UnsupportedEncodingException {
         byte[] bytes
-            = digest(hashMe, salt);
+            = hash(hashMe, salt);
 
         StringBuilder sp
             = new StringBuilder();
@@ -25,21 +26,22 @@ public class Sha512 {
         return sp.toString().toUpperCase();
     }
 
-    public String hashToBase64(String hashMe, String salt)
+    public String hashToBase64(String hashMe, Optional<String> salt)
     throws NoSuchAlgorithmException, UnsupportedEncodingException {
         return Base64.getEncoder().encodeToString(
-            digest(hashMe, salt)
+            hash(hashMe, salt)
         ).toUpperCase();
     }
 
-    protected byte[] digest(String hashMe, String salt)
+    public byte[] hash(String hashMe, Optional<String> salt)
     throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md
             = MessageDigest.getInstance("SHA-512");
 
         md.update(hashMe.getBytes("UTF-8"));
-        md.update(salt.getBytes("UTF-8"));
-        
+        salt.ifPresent(s -> {
+            try { md.update(s.getBytes("UTF-8")); } catch (Exception e) {throw new RuntimeException(e);}
+        });
 
         return md.digest();
     }
