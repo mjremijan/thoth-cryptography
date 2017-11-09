@@ -27,6 +27,7 @@ public class Aes256 {
     public Aes256(SecretKey secretKey) {
         this.secretKey = secretKey;
         this.secRandom = new SecureRandom();
+        this.init();
     }
 
 
@@ -121,6 +122,55 @@ public class Aes256 {
     }
 
 
+    public String decryptFromBase64_2(String base64EncodedEncryptedMessage, Optional<String> aad) {
+
+        try {
+            // Decode
+            byte [] ivPlusEncryptedBytes
+                = Base64.getDecoder().decode(base64EncodedEncryptedMessage);
+
+            // Get IV
+            byte iv[] = new byte[IV_SIZE];
+            System.arraycopy(ivPlusEncryptedBytes, 0, iv, 0, IV_SIZE);
+
+            // Initialize GCM Parameters
+            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
+
+            // Transformation specifies algortihm, mode of operation and padding
+            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
+
+            // Get encrypted bytes
+            byte [] encryptedBytes = new byte[ivPlusEncryptedBytes.length - IV_SIZE];
+            System.arraycopy(ivPlusEncryptedBytes, IV_SIZE, encryptedBytes, 0, encryptedBytes.length);
+
+            // Init for decryption
+            c.init(Cipher.DECRYPT_MODE, secretKey, spec, secRandom);
+
+            // Add AAD tag data if present
+            aad.ifPresent(t -> {
+                try {
+                    c.updateAAD(t.getBytes("UTF-8"));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            // Add message to decrypt
+            c.update(encryptedBytes);
+
+            // Decrypt
+            byte[] decryptedBytes
+                = c.doFinal();
+
+            // Return
+            return new String(decryptedBytes, "UTF-8");
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public String encryptToBase64_2(String message, Optional<String> aad) {
         try {
             // Transformation specifies algortihm, mode of operation and padding
@@ -131,10 +181,10 @@ public class Aes256 {
             secRandom.nextBytes(iv); // SecureRandom initialized using self-seeding
 
             // Initialize GCM Parameters
-            gcmParameterSpec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
+            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
 
             // Init for encryption
-            c.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec, secRandom);
+            c.init(Cipher.ENCRYPT_MODE, secretKey, spec, secRandom);
 
             // Add AAD tag data if present
             aad.ifPresent(t -> {
@@ -156,9 +206,13 @@ public class Aes256 {
             // Concatinate IV and encrypted bytes.  The IV is needed later
             // in order to to decrypt.  The IV value does not need to be
             // kept secret, so it's OK to encode it in the return value
+            //
+            // Create a new byte[] the combined length of IV and encryptedBytes
             byte[] ivPlusEncryptedBytes = new byte[iv.length + encryptedBytes.length];
+            // Copy IV bytes into the new array
             System.arraycopy(iv, 0, ivPlusEncryptedBytes, 0, iv.length);
-            System.arraycopy(encryptedBytes, 0, ivPlusEncryptedBytes, iv.length+1, encryptedBytes.length);
+            // Copy encryptedBytes into the new array
+            System.arraycopy(encryptedBytes, 0, ivPlusEncryptedBytes, iv.length, encryptedBytes.length);
 
             // Encode
             byte[] encodedBytes

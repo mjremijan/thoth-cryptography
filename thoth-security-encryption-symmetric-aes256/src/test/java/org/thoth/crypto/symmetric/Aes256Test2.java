@@ -14,7 +14,7 @@ import org.thoth.crypto.io.ByteArrayReader;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Aes256Test {
+public class Aes256Test2 {
 
     static Path secretKeyFile;
 
@@ -41,10 +41,10 @@ public class Aes256Test {
 
         // run
         String encryptedBytesAsBase64EncodedString
-            = aes.encryptToBase64(toEncrypt, Optional.empty());
+            = aes.encryptToBase64_2(toEncrypt, Optional.empty());
 
         String decrypted
-            = aes.decryptFromBase64(encryptedBytesAsBase64EncodedString, Optional.empty());
+            = aes.decryptFromBase64_2(encryptedBytesAsBase64EncodedString, Optional.empty());
 
         // assert
         Assert.assertEquals(toEncrypt, decrypted);
@@ -66,10 +66,10 @@ public class Aes256Test {
 
         // run
         String encryptedBytesAsBase64EncodedString
-            = aes.encryptToBase64(toEncrypt, Optional.of("JUnit AAD"));
+            = aes.encryptToBase64_2(toEncrypt, Optional.of("JUnit AAD"));
 
         String decrypted
-            = aes.decryptFromBase64(encryptedBytesAsBase64EncodedString, Optional.of("JUnit AAD"));
+            = aes.decryptFromBase64_2(encryptedBytesAsBase64EncodedString, Optional.of("JUnit AAD"));
 
         // assert
         Assert.assertEquals(toEncrypt, decrypted);
