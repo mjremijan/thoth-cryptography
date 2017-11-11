@@ -6,7 +6,7 @@
         <artifactId>thoth-security</artifactId>
         <version>1.0.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>thoth-security-encryption-symmetric-aes256</artifactId>
+    <artifactId>thoth-security-03-encryption-symmetric-aes</artifactId>
     <packaging>jar</packaging>
-    <name>thoth-security-encryption-symmetric-aes256</name>
+    <name>thoth-security-03-encryption-symmetric-aes</name>
 </project>

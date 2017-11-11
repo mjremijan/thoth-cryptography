@@ -12,12 +12,12 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-    <modules>
-        <module>thoth-security-01-sha512</module>
-        <module>thoth-security-02-hash-sha512</module>
+    <modules>        
         <module>thoth-security-01-provider-list</module>
         <module>thoth-security-01-cipher-algorithm-list</module>
-        <module>thoth-security-encryption-symmetric-aes256</module>
+        <module>thoth-security-02-hash-sha512</module>
+        <module>thoth-security-03-encryption-symmetric-aes</module>
+        <module>thoth-security-03-encryption-symmetric-aes256</module>        
     </modules>
     <build>
         <pluginManagement>

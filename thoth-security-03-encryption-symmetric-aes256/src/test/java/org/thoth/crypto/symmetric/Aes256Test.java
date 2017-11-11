@@ -1,14 +1,17 @@
 package org.thoth.crypto.symmetric;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.thoth.crypto.io.ByteArrayReader;
+import org.thoth.crypto.io.ByteArrayWriter;
 
 /**
  *
@@ -20,8 +23,40 @@ public class Aes256Test {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
+
+        // Create the target directory if it doesn't exist
+        Path target = Paths.get("./target");
+        if (!Files.exists(target)) {
+            Files.createDirectory(target);
+        }
+
+        // Store the SecretKey bytes in the ./target diretory. Do
+        // this so it will be ignore by source control.  We don't
+        // want this file committed.
         secretKeyFile
-            = Paths.get("./src/test/resources/Aes256StaticTest.key").toAbsolutePath();
+            = Paths.get("./target/Aes256.key").toAbsolutePath();
+
+        try {
+            // Create KeyGenerator for an AES key
+            KeyGenerator keyGen
+                = KeyGenerator.getInstance("AES");
+
+            // This size key only works if you have
+            // "Java Cryptography Extension (JCE) Unlimited Strength"
+            // installed.  Configure to use 256 bit key
+            keyGen.init(256);
+
+            // Generate the key
+            SecretKey secretKey
+                = keyGen.generateKey();
+
+            // Store the byte[] fo the SecretKey.  This is the
+            // "private key file" you want to keep safe.
+            ByteArrayWriter writer = new ByteArrayWriter(secretKeyFile);
+            writer.write(secretKey.getEncoded());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
 
@@ -40,11 +75,11 @@ public class Aes256Test {
             = "encrypt me";
 
         // run
-        String encryptedBytesAsBase64EncodedString
-            = aes.encryptToBase64(toEncrypt, Optional.empty());
+        byte[] encryptedBytes
+            = aes.encrypt(toEncrypt, Optional.empty());
 
         String decrypted
-            = aes.decryptFromBase64(encryptedBytesAsBase64EncodedString, Optional.empty());
+            = aes.decrypt(encryptedBytes, Optional.empty());
 
         // assert
         Assert.assertEquals(toEncrypt, decrypted);
@@ -65,11 +100,11 @@ public class Aes256Test {
             = "encrypt me aad";
 
         // run
-        String encryptedBytesAsBase64EncodedString
-            = aes.encryptToBase64(toEncrypt, Optional.of("JUnit AAD"));
+        byte[] encryptedBytes
+            = aes.encrypt(toEncrypt, Optional.of("JUnit AAD"));
 
         String decrypted
-            = aes.decryptFromBase64(encryptedBytesAsBase64EncodedString, Optional.of("JUnit AAD"));
+            = aes.decrypt(encryptedBytes, Optional.of("JUnit AAD"));
 
         // assert
         Assert.assertEquals(toEncrypt, decrypted);
@@ -95,15 +130,15 @@ public class Aes256Test {
             = "encrypt me aad";
 
         // run
-        String encryptedBytesAsBase64EncodedString
-            = aesForEncrypt.encryptToBase64(toEncrypt, Optional.empty());
+        byte[] encryptedBytes
+            = aesForEncrypt.encrypt(toEncrypt, Optional.empty());
 
         ByteArrayOutputStream baos
             = new ByteArrayOutputStream();
-        baos.write(encryptedBytesAsBase64EncodedString.getBytes("UTF-8"));
+        baos.write(encryptedBytes);
 
         String decrypted
-            = aesForDecrypt.decryptFromBase64(new String(baos.toByteArray(), "UTF-8"), Optional.empty());
+            = aesForDecrypt.decrypt(baos.toByteArray(), Optional.empty());
 
         // assert
         Assert.assertEquals(toEncrypt, decrypted);

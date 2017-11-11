@@ -1,7 +1,6 @@
 package org.thoth.crypto.symmetric;
 
 import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Optional;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -28,7 +27,7 @@ public class Aes256 {
     }
 
 
-    public String encryptToBase64(String message, Optional<String> aad) {
+    public byte[] encrypt(String message, Optional<String> aad) {
         try {
             // Transformation specifies algortihm, mode of operation and padding
             Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
@@ -71,12 +70,8 @@ public class Aes256 {
             // Copy encryptedBytes into the new array
             System.arraycopy(encryptedBytes, 0, ivPlusEncryptedBytes, iv.length, encryptedBytes.length);
 
-            // Encode
-            byte[] encodedBytes
-                = Base64.getEncoder().encode(ivPlusEncryptedBytes);
-
             // Return
-            return new String(encodedBytes, "UTF-8");
+            return ivPlusEncryptedBytes;
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -84,13 +79,9 @@ public class Aes256 {
     }
 
 
-    public String decryptFromBase64(String base64EncodedEncryptedMessage, Optional<String> aad) {
+    public String decrypt(byte[] ivPlusEncryptedBytes, Optional<String> aad) {
 
         try {
-            // Decode
-            byte [] ivPlusEncryptedBytes
-                = Base64.getDecoder().decode(base64EncodedEncryptedMessage);
-
             // Get IV
             byte iv[] = new byte[IV_SIZE];
             System.arraycopy(ivPlusEncryptedBytes, 0, iv, 0, IV_SIZE);
