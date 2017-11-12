@@ -14,7 +14,7 @@ public class Aes256 {
 
     // Use 128 if you don't have the Java Cryptography Extension (JCE) Unlimited Strength installed
     public static int AES_KEY_SIZE = 256;
-    public static int IV_SIZE = 96;
+    public static int IV_SIZE = 12; // 12bytes * 8 = 96bits
     public static int TAG_BIT_LENGTH = 128;
     public static String ALGO_TRANSFORMATION_STRING = "AES/GCM/PKCS5Padding";
 
