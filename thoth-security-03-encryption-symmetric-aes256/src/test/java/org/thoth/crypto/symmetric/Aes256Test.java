@@ -112,7 +112,7 @@ public class Aes256Test {
 
 
     @Test
-    public void encrypt_and_decrypt_with_aad_using_different_Aes256_instance()
+    public void encrypt_and_decrypt_using_different_Aes256_instance()
     throws Exception {
         // setup
         SecretKey secretKey
@@ -127,7 +127,7 @@ public class Aes256Test {
             = new Aes256(secretKey);
 
         String toEncrypt
-            = "encrypt me aad";
+            = "encrypt me";
 
         // run
         byte[] encryptedBytes
