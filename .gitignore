@@ -14,3 +14,5 @@
 /thoth-security-03-encryption-symmetric-aes256/nbproject/
 /thoth-security-03-encryption-symmetric-aes256/target/
 /thoth-security-03-encryption-symmetric-aes/target/
+/thoth-security-04-encryption-asymmetric-rsa3072/target/
+/thoth-security-04-encryption-asymmetric-rsa4096/target/

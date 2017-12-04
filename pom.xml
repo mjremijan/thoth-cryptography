@@ -17,7 +17,8 @@
         <module>thoth-security-01-cipher-algorithm-list</module>
         <module>thoth-security-02-hash-sha512</module>
         <module>thoth-security-03-encryption-symmetric-aes</module>
-        <module>thoth-security-03-encryption-symmetric-aes256</module>        
+        <module>thoth-security-03-encryption-symmetric-aes256</module>
+        <module>thoth-security-04-encryption-asymmetric-rsa4096</module>
     </modules>
     <build>
         <pluginManagement>
