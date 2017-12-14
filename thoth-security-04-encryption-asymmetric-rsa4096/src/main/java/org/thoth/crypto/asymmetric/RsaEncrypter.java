@@ -1,5 +1,9 @@
 package org.thoth.crypto.asymmetric;
 
+import java.security.PublicKey;
+import javax.crypto.Cipher;
+import org.thoth.crypto.asymmetric.RsaCipher;
+
 /**
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
@@ -8,8 +12,8 @@ public class RsaEncrypter {
 
     protected RsaCipher cipher;
 
-    public RsaEncrypter(RsaCipher cipher) {
-        this.cipher = cipher;
+    public RsaEncrypter(PublicKey key) {
+        this.cipher = new RsaCipher(Cipher.ENCRYPT_MODE, key);
     }
 
     public byte[] encrypt(String message) {

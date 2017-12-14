@@ -4,7 +4,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyPair;
-import javax.crypto.Cipher;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class RsaTest {
         try {
             // Create KeyPair for RSA
             KeyPair keyPair
-                = new RsaKeyPairProducer().generate();
+                = new RsaKeyPairProducer().produce();
 
             // Store the PrivateKey bytes. This is what
             // you want to keep absolutely safe
@@ -66,22 +67,21 @@ public class RsaTest {
     @Test
     public void encrypt_and_decrypt() throws Exception {
         // setup
-        KeyPair keyPair
-            = new RsaKeyPairProducer().generate(
-                  new ByteArrayReader(privateKeyFile).read()
-                , new ByteArrayReader(publicKeyFile).read()
+        PrivateKey privateKey
+            = new RsaPrivateKeyProducer().produce(
+                new ByteArrayReader(privateKeyFile).read()
             );
 
-        RsaCipher cipherForEncryption
-            = new RsaCipher(Cipher.ENCRYPT_MODE, keyPair.getPublic());
-        RsaEncrypter encrypter
-            = new RsaEncrypter(cipherForEncryption);
+        PublicKey publicKey
+            = new RsaPublicKeyProducer().produce(
+                new ByteArrayReader(publicKeyFile).read()
+            );
 
-
-        RsaCipher cipherForDecryption
-            = new RsaCipher(Cipher.DECRYPT_MODE, keyPair.getPrivate());
         RsaDecrypter decrypter
-            = new RsaDecrypter(cipherForDecryption);
+            = new RsaDecrypter(privateKey);
+
+        RsaEncrypter encrypter
+            = new RsaEncrypter(publicKey);
 
         String toEncrypt
             = "encrypt me";
