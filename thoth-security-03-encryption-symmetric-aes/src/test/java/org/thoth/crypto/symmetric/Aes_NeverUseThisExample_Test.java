@@ -7,7 +7,7 @@ import org.junit.Test;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class AesTest {
+public class Aes_NeverUseThisExample_Test {
 
 
     @Test
