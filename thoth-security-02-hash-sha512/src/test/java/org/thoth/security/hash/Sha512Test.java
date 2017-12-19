@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
 public class Sha512Test {
