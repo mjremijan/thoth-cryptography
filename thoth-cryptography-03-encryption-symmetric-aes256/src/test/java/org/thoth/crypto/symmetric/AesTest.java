@@ -15,7 +15,7 @@ import org.thoth.crypto.io.ByteArrayWriter;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Aes256Test {
+public class AesTest {
 
     static Path secretKeyFile;
 
@@ -29,7 +29,7 @@ public class Aes256Test {
 
         // Generate a SecretKey for the test
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().produce();
+            = new AesSecretKeyProducer().produce();
 
         // Store the byte[] of the SecretKey.  This is the
         // "private key file" you want to keep safe.
@@ -42,12 +42,12 @@ public class Aes256Test {
     public void encrypt_and_decrypt_using_same_Aes256_instance() {
         // setup
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().produce(
+            = new AesSecretKeyProducer().produce(
                 new ByteArrayReader(secretKeyFile).read()
             );
 
-        Aes256 aes
-            = new Aes256(secretKey);
+        Aes aes
+            = new Aes(secretKey);
 
         String toEncrypt
             = "encrypt me";
@@ -67,12 +67,12 @@ public class Aes256Test {
     public void encrypt_and_decrypt_with_aad_using_same_Aes256_instance() {
         // setup
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().produce(
+            = new AesSecretKeyProducer().produce(
                 new ByteArrayReader(secretKeyFile).read()
             );
 
-        Aes256 aes
-            = new Aes256(secretKey);
+        Aes aes
+            = new Aes(secretKey);
 
         String toEncrypt
             = "encrypt me aad";
@@ -94,15 +94,15 @@ public class Aes256Test {
     throws Exception {
         // setup
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().produce(
+            = new AesSecretKeyProducer().produce(
                 new ByteArrayReader(secretKeyFile).read()
             );
 
-        Aes256 aesForEncrypt
-            = new Aes256(secretKey);
+        Aes aesForEncrypt
+            = new Aes(secretKey);
 
-        Aes256 aesForDecrypt
-            = new Aes256(secretKey);
+        Aes aesForDecrypt
+            = new Aes(secretKey);
 
         String toEncrypt
             = "encrypt me";

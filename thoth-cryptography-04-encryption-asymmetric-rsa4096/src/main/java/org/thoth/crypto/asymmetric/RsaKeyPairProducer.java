@@ -13,7 +13,8 @@ public class RsaKeyPairProducer {
      * Generates a new RSA-4096 bit {@code KeyPair}.
      *
      * @return {@code KeyPair}, never null
-     * @throws RuntimeException All exceptions are caught and re-thrown as {@code RuntimeException}
+     * @throws RuntimeException All exceptions are caught
+     * and re-thrown as {@code RuntimeException}
      */
     public KeyPair produce() {
         KeyPairGenerator keyGen;

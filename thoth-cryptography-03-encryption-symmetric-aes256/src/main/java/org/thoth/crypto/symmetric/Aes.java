@@ -10,7 +10,7 @@ import javax.crypto.spec.GCMParameterSpec;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Aes256 {
+public class Aes {
 
     // If you don't have the Java Cryptography Extension
     // (JCE) Unlimited Strength packaged installed, use
@@ -26,7 +26,7 @@ public class Aes256 {
     protected SecretKey secretKey;
     protected SecureRandom secureRandom;
 
-    public Aes256(SecretKey secretKey) {
+    public Aes(SecretKey secretKey) {
         this.secretKey = secretKey;
         this.secureRandom = new SecureRandom();
     }

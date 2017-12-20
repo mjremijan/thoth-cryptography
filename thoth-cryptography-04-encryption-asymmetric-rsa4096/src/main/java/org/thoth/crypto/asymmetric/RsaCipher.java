@@ -17,7 +17,8 @@ public class RsaCipher {
 
     public RsaCipher(int mode, Key key) {
         try {
-            cipher = Cipher.getInstance(String.format("%s/%s/%s",ALGORITHM_NAME,MODE_OF_OPERATION,PADDING_SCHEME));
+            cipher = Cipher.getInstance(
+                String.format("%s/%s/%s",ALGORITHM_NAME,MODE_OF_OPERATION,PADDING_SCHEME));
             cipher.init(mode, key);
         } catch (Exception e) {
             throw new RuntimeException(e);

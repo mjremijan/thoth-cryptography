@@ -21,16 +21,17 @@ public class ByteArrayReader {
         try (
             Scanner scanner
                 =  new Scanner(inputFile);
-        ){
+
             ByteArrayOutputStream baos
                 = new ByteArrayOutputStream();
-
+        ){
             while (scanner.hasNext()) {
                 baos.write(Byte.parseByte(scanner.nextLine()));
             }
 
+            baos.flush();
             return baos.toByteArray();
-            
+
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

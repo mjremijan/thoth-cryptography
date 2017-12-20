@@ -7,14 +7,14 @@ import org.junit.Test;
 /**
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Sha512Test {
+public class ShaTest {
 
     @Test
     public void test_hash_with_optional_to_hex() throws Exception {
         // setup
         String username = "mjremijan";
         String password = "super!secret";
-        Sha512 sha = new Sha512();
+        Sha sha = new Sha();
 
         // test
         String asHex
@@ -30,7 +30,7 @@ public class Sha512Test {
     public void test_hash_without_optional_to_hex() throws Exception {
         // setup
         String password = "super!secret";
-        Sha512 sha = new Sha512();
+        Sha sha = new Sha();
 
         // test
         String asHex
@@ -48,7 +48,7 @@ public class Sha512Test {
         // setup
         String username = "mjremijan";
         String password = "super!secret";
-        Sha512 sha = new Sha512();
+        Sha sha = new Sha();
 
         // test
         String asBase64
@@ -65,7 +65,7 @@ public class Sha512Test {
     public void test_hash_without_optional_to_base64() throws Exception {
         // setup
         String password = "super!secret";
-        Sha512 sha = new Sha512();
+        Sha sha = new Sha();
 
         // test
         String asBase64

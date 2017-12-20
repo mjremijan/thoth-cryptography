@@ -1,6 +1,5 @@
 package org.thoth.crypto.asymmetric;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyPair;
@@ -24,12 +23,6 @@ public class RsaTest {
     @BeforeClass
     public static void beforeClass() throws Exception {
 
-        // Create the target directory if it doesn't exist
-        Path target = Paths.get("./target");
-        if (!Files.exists(target)) {
-            Files.createDirectory(target);
-        }
-
         // Store the PrivateKey and PublicKey bytes in the ./target
         // diretory. Do this so it will be ignore by source control.
         // We don't want this file committed.
@@ -38,28 +31,24 @@ public class RsaTest {
         publicKeyFile
             = Paths.get("./target/RsaPublic.key").toAbsolutePath();
 
-        try {
-            // Create KeyPair for RSA
-            KeyPair keyPair
-                = new RsaKeyPairProducer().produce();
+        // Create KeyPair for RSA
+        KeyPair keyPair
+            = new RsaKeyPairProducer().produce();
 
-            // Store the PrivateKey bytes. This is what
-            // you want to keep absolutely safe
-            {
-                ByteArrayWriter writer = new ByteArrayWriter(privateKeyFile);
-                writer.write(keyPair.getPrivate().getEncoded());
-            }
+        // Store the PrivateKey bytes. This is what
+        // you want to keep absolutely safe
+        {
+            ByteArrayWriter writer = new ByteArrayWriter(privateKeyFile);
+            writer.write(keyPair.getPrivate().getEncoded());
+        }
 
-            // Store the PublicKey bytes.  This you
-            // can freely distribute so others can
-            // encrypt messages which you can then
-            // decrypt with the PrivateKey you keep safe.
-            {
-                ByteArrayWriter writer = new ByteArrayWriter(publicKeyFile);
-                writer.write(keyPair.getPublic().getEncoded());
-            }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        // Store the PublicKey bytes.  This you
+        // can freely distribute so others can
+        // encrypt messages which you can then
+        // decrypt with the PrivateKey you keep safe.
+        {
+            ByteArrayWriter writer = new ByteArrayWriter(publicKeyFile);
+            writer.write(keyPair.getPublic().getEncoded());
         }
     }
 

@@ -8,7 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Aes256SecretKeyProducer {
+public class AesSecretKeyProducer {
 
     /**
      * Generates a new AES-256 bit {@code SecretKey}.

@@ -13,10 +13,12 @@ public class RsaPublicKeyProducer {
     /**
      * Regenerates a previous RSA {@code PublicKey}.
      *
-     * @param encodedByteArrayForPublicKey The bytes this method will use to regenerate a previously created {@code PublicKey}
+     * @param encodedByteArrayForPublicKey The bytes this method
+     * will use to regenerate a previously created {@code PublicKey}
      *
      * @return {@code PublicKey}, never null
-     * @throws RuntimeException All exceptions are caught and re-thrown as {@code RuntimeException}
+     * @throws RuntimeException All exceptions are caught
+     * and re-thrown as {@code RuntimeException}
      */
     public PublicKey produce(byte[] encodedByteArrayForPublicKey) {
         try {

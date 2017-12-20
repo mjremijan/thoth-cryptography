@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Sha512 {
+public class Sha {
 
     public String hashToHex(String hashMe, Optional<String> salt)
     throws NoSuchAlgorithmException, UnsupportedEncodingException {
