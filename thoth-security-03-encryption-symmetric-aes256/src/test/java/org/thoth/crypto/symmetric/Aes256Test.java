@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -37,20 +36,11 @@ public class Aes256Test {
             = Paths.get("./target/Aes256.key").toAbsolutePath();
 
         try {
-            // Create KeyGenerator for an AES key
-            KeyGenerator keyGen
-                = KeyGenerator.getInstance("AES");
-
-            // This size key only works if you have
-            // "Java Cryptography Extension (JCE) Unlimited Strength"
-            // installed.  Configure to use 256 bit key
-            keyGen.init(256);
-
-            // Generate the key
+            // Generate a SecretKey for the test
             SecretKey secretKey
-                = keyGen.generateKey();
+                = new Aes256SecretKeyProducer().produce();
 
-            // Store the byte[] fo the SecretKey.  This is the
+            // Store the byte[] of the SecretKey.  This is the
             // "private key file" you want to keep safe.
             ByteArrayWriter writer = new ByteArrayWriter(secretKeyFile);
             writer.write(secretKey.getEncoded());
@@ -64,7 +54,7 @@ public class Aes256Test {
     public void encrypt_and_decrypt_using_same_Aes256_instance() {
         // setup
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().generate(
+            = new Aes256SecretKeyProducer().produce(
                 new ByteArrayReader(secretKeyFile).read()
             );
 
@@ -89,7 +79,7 @@ public class Aes256Test {
     public void encrypt_and_decrypt_with_aad_using_same_Aes256_instance() {
         // setup
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().generate(
+            = new Aes256SecretKeyProducer().produce(
                 new ByteArrayReader(secretKeyFile).read()
             );
 
@@ -116,7 +106,7 @@ public class Aes256Test {
     throws Exception {
         // setup
         SecretKey secretKey
-            = new Aes256SecretKeyProducer().generate(
+            = new Aes256SecretKeyProducer().produce(
                 new ByteArrayReader(secretKeyFile).read()
             );
 

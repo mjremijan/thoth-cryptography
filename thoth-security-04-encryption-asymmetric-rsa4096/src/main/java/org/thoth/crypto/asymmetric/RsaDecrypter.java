@@ -2,7 +2,6 @@ package org.thoth.crypto.asymmetric;
 
 import java.security.PrivateKey;
 import javax.crypto.Cipher;
-import org.thoth.crypto.asymmetric.RsaCipher;
 
 /**
  *

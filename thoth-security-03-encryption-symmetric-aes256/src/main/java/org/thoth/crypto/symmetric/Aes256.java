@@ -13,10 +13,12 @@ import javax.crypto.spec.GCMParameterSpec;
 public class Aes256 {
 
     // Use 128 if you don't have the Java Cryptography Extension (JCE) Unlimited Strength installed
-    public static int AES_KEY_SIZE = 256;
+    public static int KEY_SIZE = 256;
     public static int IV_SIZE = 12; // 12bytes * 8 = 96bits
-    public static int TAG_BIT_LENGTH = 128;
-    public static String ALGO_TRANSFORMATION_STRING = "AES/GCM/PKCS5Padding";
+    public static int TAG_BIT_SIZE = 128;
+    public static String ALGORITHM_NAME = "AES";
+    public static String MODE_OF_OPERATION = "GCM";
+    public static String PADDING_SCHEME = "PKCS5Padding";
 
     protected SecretKey secretKey;
     protected SecureRandom secureRandom;
@@ -30,14 +32,16 @@ public class Aes256 {
     public byte[] encrypt(String message, Optional<String> aad) {
         try {
             // Transformation specifies algortihm, mode of operation and padding
-            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
+            Cipher c = Cipher.getInstance(
+                String.format("%s/%s/%s",ALGORITHM_NAME,MODE_OF_OPERATION,PADDING_SCHEME)
+            );
 
             // Generate IV
             byte iv[] = new byte[IV_SIZE];
             secureRandom.nextBytes(iv); // SecureRandom initialized using self-seeding
 
             // Initialize GCM Parameters
-            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
+            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_SIZE, iv);
 
             // Init for encryption
             c.init(Cipher.ENCRYPT_MODE, secretKey, spec, secureRandom);
@@ -87,10 +91,12 @@ public class Aes256 {
             System.arraycopy(ivPlusEncryptedBytes, 0, iv, 0, IV_SIZE);
 
             // Initialize GCM Parameters
-            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_LENGTH, iv);
+            GCMParameterSpec spec = new GCMParameterSpec(TAG_BIT_SIZE, iv);
 
             // Transformation specifies algortihm, mode of operation and padding
-            Cipher c = Cipher.getInstance(ALGO_TRANSFORMATION_STRING);
+            Cipher c = Cipher.getInstance(
+                String.format("%s/%s/%s",ALGORITHM_NAME,MODE_OF_OPERATION,PADDING_SCHEME)
+            );
 
             // Get encrypted bytes
             byte [] encryptedBytes = new byte[ivPlusEncryptedBytes.length - IV_SIZE];

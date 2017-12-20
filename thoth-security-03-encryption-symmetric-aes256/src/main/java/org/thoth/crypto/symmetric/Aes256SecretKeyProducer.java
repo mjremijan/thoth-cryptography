@@ -16,7 +16,7 @@ public class Aes256SecretKeyProducer {
      * @return {@code SecretKey}, never null
      * @throws RuntimeException All exceptions are caught and re-thrown as {@code RuntimeException}
      */
-    public SecretKey generate() {
+    public SecretKey produce() {
         KeyGenerator keyGen;
         try {
             keyGen = KeyGenerator.getInstance("AES");
@@ -37,7 +37,7 @@ public class Aes256SecretKeyProducer {
      * @return {@code SecretKey}, never null
      * @throws RuntimeException All exceptions are caught and re-thrown as {@code RuntimeException}
      */
-    public SecretKey generate(byte [] encodedByteArray) {
+    public SecretKey produce(byte [] encodedByteArray) {
         try {
             return new SecretKeySpec(encodedByteArray, "AES");
         } catch (Exception ex) {
