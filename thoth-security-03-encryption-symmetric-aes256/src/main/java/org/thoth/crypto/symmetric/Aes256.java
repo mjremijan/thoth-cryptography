@@ -12,8 +12,11 @@ import javax.crypto.spec.GCMParameterSpec;
  */
 public class Aes256 {
 
-    // Use 128 if you don't have the Java Cryptography Extension (JCE) Unlimited Strength installed
+    // If you don't have the Java Cryptography Extension
+    // (JCE) Unlimited Strength packaged installed, use
+    // a 128 bit KEY_SIZE.
     public static int KEY_SIZE = 256;
+    
     public static int IV_SIZE = 12; // 12bytes * 8 = 96bits
     public static int TAG_BIT_SIZE = 128;
     public static String ALGORITHM_NAME = "AES";
