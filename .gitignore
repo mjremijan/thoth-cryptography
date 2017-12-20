@@ -16,3 +16,8 @@
 /thoth-security-03-encryption-symmetric-aes/target/
 /thoth-security-04-encryption-asymmetric-rsa3072/target/
 /thoth-security-04-encryption-asymmetric-rsa4096/target/
+/thoth-cryptography-01-cipher-algorithm-list/target/
+/thoth-cryptography-01-provider-list/target/
+/thoth-cryptography-02-hash-sha512/target/
+/thoth-cryptography-03-encryption-symmetric-aes256/target/
+/thoth-cryptography-04-encryption-asymmetric-rsa4096/target/
