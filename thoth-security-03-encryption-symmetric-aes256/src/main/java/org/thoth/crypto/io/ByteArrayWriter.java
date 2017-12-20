@@ -14,8 +14,24 @@ public class ByteArrayWriter {
 
     protected Path outputFile;
 
-    public ByteArrayWriter(Path outputFile) {
+    private void initOutputFile(Path outputFile) {
         this.outputFile = outputFile;
+    }
+
+    private void initOutputDirectory() {
+        Path outputDirectory = outputFile.getParent();
+        if (!Files.exists(outputDirectory)) {
+            try {
+                Files.createDirectories(outputDirectory);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public ByteArrayWriter(Path outputFile) {
+        initOutputFile(outputFile);
+        initOutputDirectory();
     }
 
     public void write(byte[] bytesArrayToWrite) {

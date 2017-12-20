@@ -1,7 +1,6 @@
 package org.thoth.crypto.symmetric;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -22,31 +21,20 @@ public class Aes256Test {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-
-        // Create the target directory if it doesn't exist
-        Path target = Paths.get("./target");
-        if (!Files.exists(target)) {
-            Files.createDirectory(target);
-        }
-
         // Store the SecretKey bytes in the ./target diretory. Do
         // this so it will be ignore by source control.  We don't
         // want this file committed.
         secretKeyFile
             = Paths.get("./target/Aes256.key").toAbsolutePath();
 
-        try {
-            // Generate a SecretKey for the test
-            SecretKey secretKey
-                = new Aes256SecretKeyProducer().produce();
+        // Generate a SecretKey for the test
+        SecretKey secretKey
+            = new Aes256SecretKeyProducer().produce();
 
-            // Store the byte[] of the SecretKey.  This is the
-            // "private key file" you want to keep safe.
-            ByteArrayWriter writer = new ByteArrayWriter(secretKeyFile);
-            writer.write(secretKey.getEncoded());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
+        // Store the byte[] of the SecretKey.  This is the
+        // "private key file" you want to keep safe.
+        ByteArrayWriter writer = new ByteArrayWriter(secretKeyFile);
+        writer.write(secretKey.getEncoded());
     }
 
 
