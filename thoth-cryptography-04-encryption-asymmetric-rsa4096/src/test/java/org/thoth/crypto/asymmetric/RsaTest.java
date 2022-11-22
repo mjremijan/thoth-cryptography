@@ -54,7 +54,7 @@ public class RsaTest {
 
 
     @Test
-    public void encrypt_and_decrypt() throws Exception {
+    public void encrypt_and_decrypt_short() throws Exception {
         // setup
         PrivateKey privateKey
             = new RsaPrivateKeyProducer().produce(
@@ -74,6 +74,40 @@ public class RsaTest {
 
         String toEncrypt
             = "encrypt me";
+
+        // run
+        byte[] encryptedBytes
+            = encrypter.encrypt(toEncrypt);
+        System.out.printf("Encrypted %s%n", new String(encryptedBytes,"UTF-8"));
+
+        String decrypted
+            = decrypter.decrypt(encryptedBytes);
+
+        // assert
+        Assert.assertEquals(toEncrypt, decrypted);
+    }
+    
+    @Test
+    public void encrypt_and_decrypt_long() throws Exception {
+        // setup
+        PrivateKey privateKey
+            = new RsaPrivateKeyProducer().produce(
+                new ByteArrayReader(privateKeyFile).read()
+            );
+
+        PublicKey publicKey
+            = new RsaPublicKeyProducer().produce(
+                new ByteArrayReader(publicKeyFile).read()
+            );
+
+        RsaDecrypter decrypter
+            = new RsaDecrypter(privateKey);
+
+        RsaEncrypter encrypter
+            = new RsaEncrypter(publicKey);
+
+        String toEncrypt
+            = "encrypt me 1, encrypt me 2, encrypt me 3, encrypt me 4, encrypt me 5, encrypt me 6, encrypt me 7, encrypt me 8, encrypt me 9, encrypt me 10";
 
         // run
         byte[] encryptedBytes

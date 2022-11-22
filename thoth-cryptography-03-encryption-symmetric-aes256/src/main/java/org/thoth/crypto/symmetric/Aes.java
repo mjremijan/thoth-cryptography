@@ -1,5 +1,6 @@
 package org.thoth.crypto.symmetric;
 
+import java.io.ByteArrayOutputStream;
 import java.security.SecureRandom;
 import java.util.Optional;
 import javax.crypto.Cipher;
@@ -58,24 +59,32 @@ public class Aes {
                 }
             });
 
-            // Add message to encrypt
-            c.update(message.getBytes("UTF-8"));
+            // Create output array to hold all the encrypted bytes
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            
+            // Add a part to a multi-part encryption.
+            // Technically don't need to do this but
+            // I'm wanted to learn how to use update()
+            // and the doFinal() method correctly.            
+            baos.write(
+                c.update(message.getBytes("UTF-8"))
+            );
 
-            // Encrypt
-            byte[] encryptedBytes
-                = c.doFinal();
-
-
+            // Finish multi-part encryption
+            baos.write(
+                c.doFinal()        
+            );
+            
             // Concatinate IV and encrypted bytes.  The IV is needed later
             // in order to to decrypt.  The IV value does not need to be
             // kept secret, so it's OK to encode it in the return value
             //
             // Create a new byte[] the combined length of IV and encryptedBytes
-            byte[] ivPlusEncryptedBytes = new byte[iv.length + encryptedBytes.length];
+            byte[] ivPlusEncryptedBytes = new byte[iv.length + baos.size()];
             // Copy IV bytes into the new array
             System.arraycopy(iv, 0, ivPlusEncryptedBytes, 0, iv.length);
             // Copy encryptedBytes into the new array
-            System.arraycopy(encryptedBytes, 0, ivPlusEncryptedBytes, iv.length, encryptedBytes.length);
+            System.arraycopy(baos.toByteArray(), 0, ivPlusEncryptedBytes, iv.length, baos.size());
 
             // Return
             return ivPlusEncryptedBytes;
