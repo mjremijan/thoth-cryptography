@@ -62,13 +62,25 @@ public class Aes {
             // Create output array to hold all the encrypted bytes
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             
+            // **********
+            // ** NOTE **
+            // **********
+            // What I am doing next to break up the String into seperate
+            // Strings is COMPLETELY UNESSESARY! I'm doing this just so
+            // I can test/understand how Cipher#update() works in combination
+            // with Cipher#doFinal().
+            /* UNESSESARY */ int chunkSize = 5;
+            /* UNESSESARY */ String[] chunks = message.split("(?<=\\G.{" + chunkSize + "})");
+            
             // Add a part to a multi-part encryption.
             // Technically don't need to do this but
             // I'm wanted to learn how to use update()
-            // and the doFinal() method correctly.            
-            baos.write(
-                c.update(message.getBytes("UTF-8"))
-            );
+            // and the doFinal() method correctly. 
+            for (String chunk : chunks) {
+                baos.write(
+                    c.update(chunk.getBytes("UTF-8"))
+                );
+            }
 
             // Finish multi-part encryption
             baos.write(

@@ -3,6 +3,7 @@ package org.thoth.crypto.symmetric;
 import java.io.ByteArrayOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Optional;
 import javax.crypto.SecretKey;
 import org.junit.Assert;
@@ -204,5 +205,13 @@ public class AesTest {
 
         // assert
         Assert.assertEquals(toEncrypt, decrypted);
+    }
+    
+    @Test
+    public void foo() {
+        String s = "ABC";
+        int chunkSize = 5;
+        String[] chunks = s.split("(?<=\\G.{" + chunkSize + "})");
+        System.out.println(Arrays.toString(chunks));
     }
 }
