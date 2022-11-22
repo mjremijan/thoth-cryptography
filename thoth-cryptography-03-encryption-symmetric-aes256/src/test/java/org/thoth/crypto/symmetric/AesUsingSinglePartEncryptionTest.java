@@ -16,7 +16,7 @@ import org.thoth.crypto.io.ByteArrayWriter;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class AesTest {
+public class AesUsingSinglePartEncryptionTest {
 
     static Path secretKeyFile;
 
@@ -48,7 +48,7 @@ public class AesTest {
             );
 
         Aes aes
-            = new Aes(secretKey);
+            = new AesUsingSinglePartEncryption(secretKey);
 
         String toEncrypt
             = "encrypt me1, encrypt me2, encrypt me3, encrypt me4, encrypt me5, encrypt me6, encrypt me7, encrypt me8, encrypt me9, encrypt me10";
@@ -74,7 +74,7 @@ public class AesTest {
             );
 
         Aes aes
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         String toEncrypt
             = "encrypt me";
@@ -99,7 +99,7 @@ public class AesTest {
             );
 
         Aes aes
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         String toEncrypt
             = "encrypt me aad";
@@ -123,7 +123,7 @@ public class AesTest {
             );
 
         Aes aes
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         String toEncrypt
             = "encrypt me aad 1, encrypt me aad 2, encrypt me aad 3, encrypt me aad 4, encrypt me aad 5, encrypt me aad 6, encrypt me aad 7, encrypt me aad 8, encrypt me aad 9, encrypt me aad 10";
@@ -150,10 +150,10 @@ public class AesTest {
             );
 
         Aes aesForEncrypt
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         Aes aesForDecrypt
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         String toEncrypt
             = "encrypt me1, encrypt me2, encrypt me3, encrypt me4, encrypt me5, encrypt me6, encrypt me7, encrypt me8, encrypt me9, encrypt me10";
@@ -184,10 +184,10 @@ public class AesTest {
             );
 
         Aes aesForEncrypt
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         Aes aesForDecrypt
-            = new Aes(secretKey);
+            = new AesUsingMultiplePartEncryption(secretKey);
 
         String toEncrypt
             = "eNcryPt Me";

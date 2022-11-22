@@ -1,9 +1,12 @@
 package org.thoth.crypto.symmetric;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Optional;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 
@@ -11,7 +14,7 @@ import javax.crypto.spec.GCMParameterSpec;
  *
  * @author Michael Remijan mjremijan@yahoo.com @mjremijan
  */
-public class Aes {
+public abstract class Aes {
 
     // If you don't have the Java Cryptography Extension
     // (JCE) Unlimited Strength packaged installed, use
@@ -27,7 +30,7 @@ public class Aes {
     protected SecretKey secretKey;
     protected SecureRandom secureRandom;
 
-    public Aes(SecretKey secretKey) {
+    protected Aes(SecretKey secretKey) {
         this.secretKey = secretKey;
         this.secureRandom = new SecureRandom();
     }
@@ -59,33 +62,10 @@ public class Aes {
                 }
             });
 
-            // Create output array to hold all the encrypted bytes
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            
-            // **********
-            // ** NOTE **
-            // **********
-            // What I am doing next to break up the String into seperate
-            // Strings is COMPLETELY UNESSESARY! I'm doing this just so
-            // I can test/understand how Cipher#update() works in combination
-            // with Cipher#doFinal().
-            /* UNESSESARY */ int chunkSize = 5;
-            /* UNESSESARY */ String[] chunks = message.split("(?<=\\G.{" + chunkSize + "})");
-            
-            // Add a part to a multi-part encryption.
-            // Technically don't need to do this but
-            // I'm wanted to learn how to use update()
-            // and the doFinal() method correctly. 
-            for (String chunk : chunks) {
-                baos.write(
-                    c.update(chunk.getBytes("UTF-8"))
-                );
-            }
-
-            // Finish multi-part encryption
-            baos.write(
-                c.doFinal()        
-            );
+            // I demonstrate 2 different ways of getting the
+            // encrypted bytes. See the 2 sub-classes which
+            // implement the method of this abstract class.
+            ByteArrayOutputStream baos = getEncryptedBytes(message, c);
             
             // Concatinate IV and encrypted bytes.  The IV is needed later
             // in order to to decrypt.  The IV value does not need to be
@@ -152,4 +132,20 @@ public class Aes {
             throw new RuntimeException(e);
         }
     }
+    
+    
+    /**
+     * An abstract method to be implemented by a subclass following the 
+     * Gang of four <a href="https://www.digitalocean.com/community/tutorials/template-method-design-pattern-in-java">Template Method Design Pattern</a>.
+     * This method is to use the {@link Cipher} provided to return the 
+     * encrypted bytes of the {@link message} parameter.
+     * 
+     * @param message The String to be encrypted.
+     * @param cipher  The Cipher object used to encrypt the message.
+     * @return
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws IOException 
+     */
+    abstract ByteArrayOutputStream getEncryptedBytes(String message, Cipher cipher) throws BadPaddingException, IllegalBlockSizeException, IOException;
 }
